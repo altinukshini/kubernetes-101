@@ -26,6 +26,9 @@ spec:
       - name: oscal-web
         image: oscal/demo:1.0
         imagePullPolicy: Never
+        env:
+          - name: ENVIRONMENT
+            value: staging
         ports:
         - containerPort: 8000
         # Kontrollo nese pod vazhdon te pranoj requests pa ndonje error brenda nje intervali kohore

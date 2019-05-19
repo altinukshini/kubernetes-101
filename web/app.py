@@ -1,4 +1,5 @@
 import subprocess
+import os
 from flask import Flask
 from redis import Redis
 from flask import json
@@ -8,13 +9,15 @@ app = Flask(__name__, template_folder='templates')
 
 hostname = subprocess.run(['cat', '/etc/hostname'], stdout=subprocess.PIPE).stdout.decode('utf-8')
 redis = Redis(host='redis', port=6379)
+
+environment = os.getenv('ENVIRONMENT', 'development')
 version = "v1.0"
 
 # Route qe kthen faqen kryesore
 @app.route('/')
 def hello():
     count = redis.incr('hits')
-    return render_template('index.html', version=version, hostname=hostname, count=count)
+    return render_template('index.html', version=version, hostname=hostname, count=count, environment=environment)
 
 # Route qe perdoret per healthcheck te aplikacionit nga kubernetes
 @app.route('/healthcheck', methods=['POST', 'GET'])
