@@ -1,0 +1,51 @@
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: oscal-web-rc
+  labels:
+    app: oscal-web
+    version: v1.0
+spec:
+  replicas: 5
+  selector:
+    app: oscal-web
+    version: v1.0
+  template:
+    metadata:
+      name: oscal-web
+      labels:
+        app: oscal-web
+        version: v1.0
+    spec:
+      containers:
+      - name: oscal-web
+        image: oscal/demo:1.0
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 8000
+---
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: redis-rc
+  labels:
+    app: redis
+spec:
+  replicas: 1
+  selector:
+    app: redis
+    role: master
+    tier: backend
+  template:
+    name: redis
+    metadata:
+      labels:
+        app: redis
+        role: master
+        tier: backend
+    spec:
+      containers:
+      - name: master
+        image: redis:alpine
+        ports:
+        - containerPort: 6379
